@@ -1,0 +1,11 @@
+version: '3.3'
+
+services:
+  web:
+    build: .
+    container_name: django_admin_bot
+    restart: always
+    env_file:
+      - .env
+    ports:
+      - '8080:8080'
