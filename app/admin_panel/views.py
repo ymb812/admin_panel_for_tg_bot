@@ -1,3 +1,5 @@
-from django.shortcuts import render
+from django.shortcuts import redirect
 
-# Create your views here.
+
+def handler404(request, exception):
+    return redirect(to='redirect_to_admin')

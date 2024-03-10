@@ -1,7 +1,7 @@
 from django.contrib import admin
 from import_export.admin import ExportActionModelAdmin, ImportExportModelAdmin
 from import_export.resources import ModelResource
-from admin_panel.models import User, Category, SubCategory, Product, UserProduct, Order
+from admin_panel.models import User, Category, SubCategory, Product, UserProduct, Order, Dispatcher, Post
 
 
 class CustomImportExport(ImportExportModelAdmin, ExportActionModelAdmin):
@@ -49,6 +49,17 @@ class ProductAdmin(CustomImportExport):
 @admin.register(Order)
 class OrderAdmin(CustomImportExport):
     list_display = ('id', 'user_id', 'is_paid', 'created_at')
+
+
+@admin.register(Dispatcher)
+class OrderAdmin(CustomImportExport):
+    list_display = [field.name for field in Dispatcher._meta.fields]
+
+
+@admin.register(Post)
+class OrderAdmin(CustomImportExport):
+    list_display = [field.name for field in Post._meta.fields]
+    list_editable = [field.name for field in Post._meta.fields if field.name != 'id' and field.name != 'created_at']
 
 
 # sort models from admin.py by their registering (not alphabetically)

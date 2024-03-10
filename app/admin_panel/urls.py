@@ -1,5 +1,7 @@
 from django.urls import path
-from admin_panel import views
+from django.views.generic import RedirectView
 
 
-urlpatterns = []
+urlpatterns = [
+    path('', RedirectView.as_view(url='admin'), name='redirect_to_admin'),
+]

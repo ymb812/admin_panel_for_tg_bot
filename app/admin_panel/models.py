@@ -1,4 +1,5 @@
 from django.db import models
+from django.utils import timezone
 
 
 class User(models.Model):
@@ -9,12 +10,12 @@ class User(models.Model):
         verbose_name_plural = verbose_name
 
     user_id = models.BigIntegerField(primary_key=True, db_index=True)
-    username = models.CharField(max_length=32, db_index=True, null=True)
-    status = models.CharField(max_length=32, null=True)
+    username = models.CharField(max_length=32, db_index=True, blank=True, null=True)
+    status = models.CharField(max_length=32, blank=True, null=True)
     first_name = models.CharField(max_length=64)
-    last_name = models.CharField(max_length=64, null=True)
-    language_code = models.CharField(max_length=2, null=True)
-    is_premium = models.BooleanField(null=True)
+    last_name = models.CharField(max_length=64, blank=True, null=True)
+    language_code = models.CharField(max_length=2, blank=True, null=True)
+    is_premium = models.BooleanField(blank=True, null=True)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
@@ -100,3 +101,39 @@ class UserProduct(models.Model):
 
     def __str__(self):
         return self.product.name
+
+
+class Dispatcher(models.Model):
+    class Meta:
+        db_table = 'mailings'
+        ordering = ['id']
+        verbose_name = 'Рассылки'
+        verbose_name_plural = verbose_name
+
+    id = models.BigAutoField(primary_key=True)
+    post = models.ForeignKey('Post', to_field='id', on_delete=models.CASCADE)
+    send_at = models.DateTimeField()
+
+    def __str__(self):
+        return f'{self.id}'
+
+
+class Post(models.Model):
+    class Meta:
+        db_table = 'mailings_content'
+        ordering = ['id']
+        verbose_name = 'Контент для рассылок'
+        verbose_name_plural = verbose_name
+
+    id = models.BigAutoField(primary_key=True)
+    text = models.CharField(max_length=256, blank=True, null=True)
+    photo_file_id = models.CharField(max_length=256, blank=True, null=True)
+    video_file_id = models.CharField(max_length=256, blank=True, null=True)
+    sticker_file_id = models.CharField(max_length=256, blank=True, null=True)
+    photo_filename = models.CharField(max_length=256, blank=True, null=True)
+    video_filename = models.CharField(max_length=256, blank=True, null=True)
+    sticker_filename = models.CharField(max_length=256, blank=True, null=True)
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return f'{self.id}'
